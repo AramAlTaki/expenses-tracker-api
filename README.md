@@ -48,7 +48,7 @@ Open `ExpensesTracker.sln` in **Visual Studio 2022/2023** or **VS Code** with th
 
 ### 3. Configure your local database
 
-Open `appsettings.Development.json` and set your connection string:
+add `appsettings.Development.json` as an app settings file and set your connection string:
 
 ```json
 "ConnectionStrings": {
