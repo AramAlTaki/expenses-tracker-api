@@ -1,6 +1,12 @@
-﻿namespace ExpensesTracker.API.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace ExpensesTracker.API.Data
 {
-    public class ExpensesTrackerDbContext
+    public class ExpensesTrackerDbContext : DbContext
     {
+        public ExpensesTrackerDbContext(DbContextOptions<ExpensesTrackerDbContext> dbContextOptions ) : base(dbContextOptions) 
+        {
+            
+        }
     }
 }
