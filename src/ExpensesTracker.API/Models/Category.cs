@@ -8,6 +8,7 @@
         public string Description { get; set; }
         public string Type { get; set; }
         public DateTime CreatedAt { get; set; }
+        public Budget Budget { get; set; }
 
     }
 }
