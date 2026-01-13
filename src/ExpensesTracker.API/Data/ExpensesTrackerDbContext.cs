@@ -33,6 +33,14 @@ namespace ExpensesTracker.API.Data
                 .HasOne(t => t.Category)
                 .WithMany(c => c.Transactions)
                 .HasForeignKey(t => t.CategoryId);
+
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Amount)
+                .HasPrecision(18, 4);
+
+            modelBuilder.Entity<Budget>()
+                .Property(b => b.Amount)
+                .HasPrecision(18, 4);
         }
 
     }
