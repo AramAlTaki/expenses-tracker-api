@@ -16,7 +16,7 @@ namespace ExpensesTracker.API.Repositories
         public async Task<Budget?> GetByIdAsync(Guid id)
         {
             return await dbContext.Budgets
-                .Include("Category")
+                .Include(b => b.Category)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -24,10 +24,11 @@ namespace ExpensesTracker.API.Repositories
         {
             await dbContext.Budgets.AddAsync(budget);
             await dbContext.SaveChangesAsync();
+
             return budget;
         }
 
-        public async Task<Budget> UpdateAsync(Guid id, Budget budget)
+        public async Task<Budget?> UpdateAsync(Guid id, Budget budget)
         {
             var existingBudget = await dbContext.Budgets.FindAsync(id);
 
@@ -45,7 +46,7 @@ namespace ExpensesTracker.API.Repositories
             return existingBudget;
         }
 
-        public async Task<Budget> DeleteAsync(Guid id)
+        public async Task<Budget?> DeleteAsync(Guid id)
         {
             var existingBudget = await dbContext.Budgets.FindAsync(id);
 
@@ -55,7 +56,7 @@ namespace ExpensesTracker.API.Repositories
             }
 
             dbContext.Budgets.Remove(existingBudget);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return existingBudget;
         }
     }

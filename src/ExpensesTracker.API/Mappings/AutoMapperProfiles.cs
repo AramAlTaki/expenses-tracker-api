@@ -12,6 +12,11 @@ namespace ExpensesTracker.API.Mappings
             CreateMap<Budget, BudgetResponse>().ReverseMap();
             CreateMap<CreateBudgetRequest, Budget>().ReverseMap();
             CreateMap<UpdateBudgetRequest, Budget>().ReverseMap();
+            CreateMap<CreateCategoryRequest, Category>().ReverseMap();
+            CreateMap<UpdateCategoryRequest, Category>().ReverseMap();
+            CreateMap<Category, CategoryResponse>().ReverseMap();
+            CreateMap<Category, CategorySummaryResponse>().ReverseMap();
+
         }
     }
 }

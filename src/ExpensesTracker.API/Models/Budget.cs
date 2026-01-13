@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ExpensesTracker.API.Data.Models
 {
@@ -25,7 +26,7 @@ namespace ExpensesTracker.API.Data.Models
         [Required(ErrorMessage = "CreatedAt is required.")]
         public DateTime CreatedAt { get; set; }
 
-        [Required(ErrorMessage = "Category is required.")]
+        [JsonIgnore]
         public Category Category { get; set; }
     }
 }

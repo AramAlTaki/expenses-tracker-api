@@ -15,12 +15,16 @@ namespace ExpensesTracker.API.Repositories
 
         public async Task<List<Category>> GetAllAsync()
         {
-            return await context.Categories.ToListAsync();
+            return await context.Categories
+                .Include(c => c.Budget)
+                .ToListAsync();
         }
 
         public async Task<Category?> GetByIdAsync(Guid Id)
         {
-            return await context.Categories.FirstOrDefaultAsync(c => c.Id == Id);
+            return await context.Categories
+                .Include(c => c.Budget)
+                .FirstOrDefaultAsync(c => c.Id == Id);
         }
 
         public async Task<Category> CreateAsync(Category category)
@@ -45,7 +49,6 @@ namespace ExpensesTracker.API.Repositories
             categoryDomain.IsIncome = category.IsIncome;
 
             await context.SaveChangesAsync();
-
             return categoryDomain;
         }
 

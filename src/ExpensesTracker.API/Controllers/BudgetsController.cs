@@ -3,7 +3,6 @@ using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Contracts.Responses;
 using ExpensesTracker.API.Data.Models;
 using ExpensesTracker.API.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpensesTracker.API.Controllers
@@ -39,8 +38,12 @@ namespace ExpensesTracker.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateBudgetRequest budgetRequest)
         {
             var budgetModel = mapper.Map<Budget>(budgetRequest);
+
             await budgetRepository.CreateAsync(budgetModel);
-            return Ok(mapper.Map<BudgetResponse>(budgetModel));
+
+            var createdBudget = mapper.Map<BudgetResponse>(budgetModel);
+
+            return CreatedAtAction(nameof(GetById), new { budgetModel.Id }, createdBudget);
         }
 
         [HttpPut]
@@ -49,10 +52,12 @@ namespace ExpensesTracker.API.Controllers
         {
             var budgetModel = mapper.Map<Budget>(budgetRequest);
             budgetModel = await budgetRepository.UpdateAsync(id, budgetModel);
+
             if (budgetModel == null)
             {
                 return NotFound();
             }
+
             return Ok(mapper.Map<BudgetResponse>(budgetModel));
         }
 
@@ -66,6 +71,7 @@ namespace ExpensesTracker.API.Controllers
             { 
                 return NotFound(); 
             }
+
             return Ok(mapper.Map<BudgetResponse>(budgetModel));
         }
     }

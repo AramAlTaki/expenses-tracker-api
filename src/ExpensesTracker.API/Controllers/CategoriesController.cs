@@ -66,8 +66,7 @@ namespace ExpensesTracker.API.Controllers
                 return NotFound();
             }
 
-            var categoryResponse = mapper.Map<Category>(updatedCategory);
-            return Ok(categoryResponse);
+            return Ok(mapper.Map<Category>(updatedCategory));
         }
 
         [HttpDelete]
@@ -81,8 +80,7 @@ namespace ExpensesTracker.API.Controllers
                 return NotFound();
             }
 
-            var categoryResponse = mapper.Map<Category>(deletedCategory);
-            return Ok(categoryResponse);
+            return Ok(mapper.Map<Category>(deletedCategory));
         }
     }
 }
