@@ -1,6 +1,6 @@
 ﻿using Azure.Core;
 using ExpensesTracker.API.Contracts.Requests;
-using ExpensesTracker.API.Data.Models;
+using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +57,7 @@ namespace ExpensesTracker.API.Controllers
                     FileName = request.File.FileName,
                 };
 
-                imageModel = await imageRepository.ReplaceImage(id, imageModel);
+                imageModel = await imageRepository.Replace(id, imageModel);
 
                 if(imageModel == null)
                 {

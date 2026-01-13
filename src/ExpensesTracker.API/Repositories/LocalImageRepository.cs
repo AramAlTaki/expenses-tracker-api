@@ -1,5 +1,5 @@
 ﻿using ExpensesTracker.API.Data;
-using ExpensesTracker.API.Data.Models;
+using ExpensesTracker.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
@@ -22,6 +22,14 @@ namespace ExpensesTracker.API.Repositories
         {
             var uniqueFileName = $"{Guid.NewGuid()}{image.Extension}";
             var localFilePath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", $"{uniqueFileName}");
+
+            var folderPath = Path.GetDirectoryName(localFilePath);
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
             using var stream = new FileStream(localFilePath, FileMode.Create);
             await image.File.CopyToAsync(stream);
 
@@ -32,7 +40,7 @@ namespace ExpensesTracker.API.Repositories
             return image;
         }
 
-        public async Task<Image> ReplaceImage(Guid id, Image newImage)
+        public async Task<Image?> Replace(Guid id, Image newImage)
         {
             var existingImage = await dbContext.Images.FirstOrDefaultAsync(i => i.Id == id);
             if (existingImage == null)

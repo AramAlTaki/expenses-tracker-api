@@ -11,5 +11,6 @@
         public DateTime IssueDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public CategorySummaryResponse Category { get; set; }
+        public ReceiptSummaryResponse Receipt { get; set; }
     }
 }

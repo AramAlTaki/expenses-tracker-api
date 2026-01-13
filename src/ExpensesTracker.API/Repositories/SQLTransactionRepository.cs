@@ -15,12 +15,18 @@ namespace ExpensesTracker.API.Repositories
 
         public async Task<List<Transaction>> GetAllAsync()
         {
-            return await context.Transactions.Include(t => t.Category).ToListAsync();
+            return await context.Transactions
+                .Include(t => t.Category)
+                .Include(t => t.Receipt)
+                .ToListAsync();
         }
 
         public async Task<Transaction?> GetByIdAsync(Guid id)
         {
-            return await context.Transactions.Include(t => t.Category).FirstOrDefaultAsync(t => t.Id == id);
+            return await context.Transactions
+                .Include(t => t.Category)
+                .Include(t => t.Receipt)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<Transaction> CreateAsync(Transaction transaction)

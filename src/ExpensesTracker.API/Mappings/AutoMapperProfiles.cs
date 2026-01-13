@@ -19,6 +19,7 @@ namespace ExpensesTracker.API.Mappings
             CreateMap<Transaction, CreateTransactionRequest>().ReverseMap();
             CreateMap<Transaction, UpdateTransactionRequest>().ReverseMap();
             CreateMap<Transaction, TransactionResponse>().ReverseMap();
+            CreateMap<Image, ReceiptSummaryResponse>().ReverseMap();
         }
     }
 }

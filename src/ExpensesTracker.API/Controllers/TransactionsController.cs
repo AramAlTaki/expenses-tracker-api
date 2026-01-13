@@ -2,7 +2,6 @@
 using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Contracts.Responses;
 using ExpensesTracker.API.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ExpensesTracker.API.Models;
 namespace ExpensesTracker.API.Controllers
