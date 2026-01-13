@@ -1,18 +1,23 @@
 using ExpensesTracker.API.Data;
+using ExpensesTracker.API.Mapping;
+using ExpensesTracker.API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ExpensesTrackerDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ExpensesTrackerConnectionString"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ExpensesTrackerConnectionString"))
 );
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
