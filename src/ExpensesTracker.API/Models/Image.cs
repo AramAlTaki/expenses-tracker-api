@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ExpensesTracker.API.Data.Models
+namespace ExpensesTracker.API.Models
 {
     public class Image
     {

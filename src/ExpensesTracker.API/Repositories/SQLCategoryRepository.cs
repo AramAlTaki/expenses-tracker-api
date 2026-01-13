@@ -1,5 +1,5 @@
 ﻿using ExpensesTracker.API.Data;
-using ExpensesTracker.API.Data.Models;
+using ExpensesTracker.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpensesTracker.API.Repositories
@@ -17,6 +17,7 @@ namespace ExpensesTracker.API.Repositories
         {
             return await context.Categories
                 .Include(c => c.Budget)
+                .Include(c => c.Transactions)
                 .ToListAsync();
         }
 
@@ -24,6 +25,7 @@ namespace ExpensesTracker.API.Repositories
         {
             return await context.Categories
                 .Include(c => c.Budget)
+                .Include(c => c.Transactions)
                 .FirstOrDefaultAsync(c => c.Id == Id);
         }
 

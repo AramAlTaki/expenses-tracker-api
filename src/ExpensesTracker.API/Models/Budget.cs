@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace ExpensesTracker.API.Data.Models
+namespace ExpensesTracker.API.Models
 {
     public class Budget
     {

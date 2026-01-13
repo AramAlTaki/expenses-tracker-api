@@ -1,7 +1,4 @@
-﻿using ExpensesTracker.API.Data.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace ExpensesTracker.API.Contracts.Responses
+﻿namespace ExpensesTracker.API.Contracts.Responses
 {
     public class BudgetResponse
     {
