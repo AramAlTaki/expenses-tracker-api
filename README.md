@@ -52,7 +52,7 @@ add `appsettings.Development.json` as an app settings file and set your connecti
 
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=YOUR_SERVER;Database=ExpensesTrackerDB;Trusted_Connection=True;TrustServerCertificate=True"
+  "ExpensesTrackerConnectionString": "Server=YOUR_SERVER;Database=ExpensesTrackerDB;Trusted_Connection=True;TrustServerCertificate=True"
 }
 ```
 ### 4. Restore NuGet packages
@@ -65,10 +65,10 @@ dotnet restore
 
 ### 5. Apply EF Core migrations
 
-Run the following command to create or update the database schema based on your EF Core migrations:
+Open Package Manager Console and run the following command to create or update the database schema based on your EF Core migrations:
 
 ```bash
-dotnet ef database update --project src/ExpensesTracker.API/ExpensesTracker.API.csproj
+Update-Database
 ```
 
 ### 6. Run the API
