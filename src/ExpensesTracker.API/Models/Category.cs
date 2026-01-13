@@ -9,6 +9,7 @@
         public string Type { get; set; }
         public DateTime CreatedAt { get; set; }
         public Budget Budget { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
 
     }
 }
