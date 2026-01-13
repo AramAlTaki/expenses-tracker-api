@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace ExpensesTracker.API.Data.Models
+namespace ExpensesTracker.API.Models
 {
     public class Category
     {
@@ -21,6 +22,7 @@ namespace ExpensesTracker.API.Data.Models
         public DateTime CreatedAt { get; set; }
 
         public Budget? Budget { get; set; }
+
         public ICollection<Transaction> Transactions { get; set; }
     }
 }

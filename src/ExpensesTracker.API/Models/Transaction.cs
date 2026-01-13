@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace ExpensesTracker.API.Data.Models
+namespace ExpensesTracker.API.Models
 {
     public class Transaction
     {
@@ -17,7 +18,6 @@ namespace ExpensesTracker.API.Data.Models
         [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Description is required.")]
         [StringLength(500, ErrorMessage = "Description cannot be longer than 500 characters.")]
         public string? Description { get; set; }
 
@@ -38,6 +38,8 @@ namespace ExpensesTracker.API.Data.Models
         public DateTime CreatedAt { get; set; }
 
         [Required(ErrorMessage = "Category is required.")]
+
+        [JsonIgnore]
         public Category Category { get; set; }
         public Image? Receipt { get; set; }
     }

@@ -1,5 +1,5 @@
 ﻿using ExpensesTracker.API.Repositories;
-using ExpensesTracker.API.Data.Models;
+using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Contracts.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

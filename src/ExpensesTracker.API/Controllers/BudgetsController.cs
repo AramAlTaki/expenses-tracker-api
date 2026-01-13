@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Contracts.Responses;
-using ExpensesTracker.API.Data.Models;
+using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

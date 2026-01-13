@@ -1,4 +1,4 @@
-﻿using ExpensesTracker.API.Data.Models;
+﻿using ExpensesTracker.API.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace ExpensesTracker.API.Contracts.Responses
@@ -9,8 +9,10 @@ namespace ExpensesTracker.API.Contracts.Responses
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsIncome { get; set; }
+        public DateTime IssueDate { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public Budget Budget { get; set; }
+        public ICollection<TransactionResponse> Transactions { get; set; }
     }
 }

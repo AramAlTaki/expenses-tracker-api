@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Contracts.Responses;
-using ExpensesTracker.API.Data.Models;
+using ExpensesTracker.API.Models;
 
 namespace ExpensesTracker.API.Mappings
 {
@@ -16,7 +16,9 @@ namespace ExpensesTracker.API.Mappings
             CreateMap<UpdateCategoryRequest, Category>().ReverseMap();
             CreateMap<Category, CategoryResponse>().ReverseMap();
             CreateMap<Category, CategorySummaryResponse>().ReverseMap();
-
+            CreateMap<Transaction, CreateTransactionRequest>().ReverseMap();
+            CreateMap<Transaction, UpdateTransactionRequest>().ReverseMap();
+            CreateMap<Transaction, TransactionResponse>().ReverseMap();
         }
     }
 }
