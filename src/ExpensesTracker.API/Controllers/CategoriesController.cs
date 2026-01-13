@@ -1,0 +1,88 @@
+﻿using ExpensesTracker.API.Repositories;
+using ExpensesTracker.API.Data.Models;
+using ExpensesTracker.API.Contracts.Requests;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+
+namespace ExpensesTracker.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CategoriesController : ControllerBase
+    {
+        private readonly ICategoryRepository categoryRepository;
+        private readonly IMapper mapper;
+
+        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper) 
+        {
+            this.categoryRepository = categoryRepository;
+            this.mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var categories = await categoryRepository.GetAllAsync();
+
+            return Ok(mapper.Map<List<Category>>(categories));
+        }
+
+        [HttpGet]
+        [Route("{Id:guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid Id)
+        {
+            var category = await categoryRepository.GetByIdAsync(Id);
+
+            if(category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(mapper.Map<Category>(category));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request)
+        {
+            var category = mapper.Map<Category>(request);
+
+            var createdCategory = await categoryRepository.CreateAsync(category);
+
+            var categoryResponse = mapper.Map<Category>(createdCategory);
+
+            return CreatedAtAction(nameof(GetById), new { createdCategory.Id }, categoryResponse);
+        }
+
+        [HttpPut]
+        [Route("{Id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] UpdateCategoryRequest request)
+        {
+            var category = mapper.Map<Category>(request);
+            var updatedCategory = await categoryRepository.UpdateAsync(Id, category);
+
+            if(updatedCategory == null)
+            {
+                return NotFound();
+            }
+
+            var categoryResponse = mapper.Map<Category>(updatedCategory);
+            return Ok(categoryResponse);
+        }
+
+        [HttpDelete]
+        [Route("{Id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid Id)
+        {
+            var deletedCategory = await categoryRepository.DeleteAsync(Id);
+
+            if(deletedCategory == null)
+            {
+                return NotFound();
+            }
+
+            var categoryResponse = mapper.Map<Category>(deletedCategory);
+            return Ok(categoryResponse);
+        }
+    }
+}

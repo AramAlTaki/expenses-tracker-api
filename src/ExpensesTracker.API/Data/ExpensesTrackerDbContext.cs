@@ -41,7 +41,26 @@ namespace ExpensesTracker.API.Data
             modelBuilder.Entity<Budget>()
                 .Property(b => b.Amount)
                 .HasPrecision(18, 4);
-        }
 
+            modelBuilder.Entity<Category>()
+                .Property(c => c.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()")
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Budget>()
+                .Property(c => c.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()")
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Transaction>()
+                .Property(c => c.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()")
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Image>()
+                .Property(c => c.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()")
+                .ValueGeneratedOnAdd();
+        }
     }
 }
