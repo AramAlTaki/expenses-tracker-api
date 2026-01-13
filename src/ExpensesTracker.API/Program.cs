@@ -16,6 +16,7 @@ builder.Services.AddDbContext<ExpensesTrackerDbContext>(options =>
 );
 
 builder.Services.AddScoped<IBudgetRepository, SQLBudgetRepository>();
+builder.Services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
 
 builder.Services.AddAutoMapper(cfg =>
 {

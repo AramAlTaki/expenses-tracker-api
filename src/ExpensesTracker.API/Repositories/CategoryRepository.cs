@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpensesTracker.API.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class SQLCategoryRepository : ICategoryRepository
     {
         private readonly ExpensesTrackerDbContext context;
 
-        public CategoryRepository(ExpensesTrackerDbContext context)
+        public SQLCategoryRepository(ExpensesTrackerDbContext context)
         {
             this.context = context;
         }
