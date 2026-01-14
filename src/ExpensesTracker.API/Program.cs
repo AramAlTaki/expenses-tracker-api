@@ -4,8 +4,12 @@ using ExpensesTracker.API.Repositories;
 using ExpensesTracker.API.Services;
 using Hangfire;
 using Hangfire.SqlServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +22,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ExpensesTrackerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ExpensesTrackerConnectionString"))
+);
+
+builder.Services.AddDbContext<ExpensesTrackerAuthDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ExpensesTrackerAuthConnectionString"))
 );
 
 builder.Services.AddScoped<IBudgetRepository, SQLBudgetRepository>();
@@ -49,6 +57,35 @@ builder.Services.AddHangfire(configuration => configuration
 
 builder.Services.AddHangfireServer();
 
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("ExpensesTracker")
+    .AddEntityFrameworkStores<ExpensesTrackerAuthDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 1;
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    });
+
 var app = builder.Build();
 
 app.UseHangfireDashboard("/hangfire");
@@ -65,6 +102,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseStaticFiles(new StaticFileOptions
