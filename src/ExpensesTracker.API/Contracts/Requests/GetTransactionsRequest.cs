@@ -16,17 +16,11 @@ namespace ExpensesTracker.API.Contracts.Requests
         [Range(2000, 2100, ErrorMessage = "EndYear is out of valid range.")]
         public int? EndYear { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessage = "MinAmount must be greater than or equal to 0.")]
-        public decimal? MinAmount { get; set; }
-
-        [Range(0, double.MaxValue, ErrorMessage = "MaxAmount must be greater than or equal to 0.")]
-        public decimal? MaxAmount { get; set; }
-
         public Guid? CategoryId { get; set; }
 
-        public bool? IsIncome { get; set; } = false;
+        public bool? IsIncome { get; set; }
 
-        [RegularExpression("^(Amoun|IssueDate)$",
+        [RegularExpression("^(Amount|IssueDate)$",
             ErrorMessage = "SortBy must be one of: Amount, IssueDate.")]
         public string? SortBy { get; set; } = "Amount";
 

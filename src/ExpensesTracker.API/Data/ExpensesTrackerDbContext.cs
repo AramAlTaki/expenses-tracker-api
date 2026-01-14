@@ -14,6 +14,7 @@ namespace ExpensesTracker.API.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Snapshot> Snapshots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +43,10 @@ namespace ExpensesTracker.API.Data
                 .Property(b => b.Amount)
                 .HasPrecision(18, 4);
 
+            modelBuilder.Entity<Snapshot>()
+                .Property(b => b.Balance)
+                .HasPrecision(18, 4);
+
             modelBuilder.Entity<Category>()
                 .Property(c => c.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()")
@@ -58,6 +63,11 @@ namespace ExpensesTracker.API.Data
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Image>()
+                .Property(c => c.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()")
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Snapshot>()
                 .Property(c => c.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()")
                 .ValueGeneratedOnAdd();

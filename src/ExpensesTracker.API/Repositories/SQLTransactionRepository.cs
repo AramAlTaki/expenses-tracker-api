@@ -24,9 +24,9 @@ namespace ExpensesTracker.API.Repositories
                 transactions = transactions.Where(t => t.CategoryId == request.CategoryId);
             }
 
-            if(request.IsIncome == false) 
+            if(request.IsIncome != null) 
             {
-                transactions = transactions.Where(t => t.IsIncome == false);
+                transactions = request.IsIncome == true ? transactions.Where(t => t.IsIncome == true) : transactions.Where(t => t.IsIncome == false);
             }
 
             if(request.StartMonth != null && request.StartYear != null)
