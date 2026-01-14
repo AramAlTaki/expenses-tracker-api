@@ -20,9 +20,9 @@ namespace ExpensesTracker.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetTransactionsRequest request)
         {
-            var transactionsDomain = await transactionRepository.GetAllAsync();
+            var transactionsDomain = await transactionRepository.GetAllAsync(request);
 
             return Ok(mapper.Map<List<TransactionResponse>>(transactionsDomain));
         }
