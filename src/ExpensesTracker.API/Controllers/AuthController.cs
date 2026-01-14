@@ -22,8 +22,8 @@ namespace ExpensesTracker.API.Controllers
         {
             var identityUser = new IdentityUser
             {
-                Email = request.Email,
-                PasswordHash = request.Password,
+                UserName = request.UserName,
+                Email = request.Email,               
             };
 
             var identityResult = await userManager.CreateAsync(identityUser,request.Password);
