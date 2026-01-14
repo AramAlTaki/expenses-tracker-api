@@ -4,8 +4,10 @@ namespace ExpensesTracker.API.Contracts.Requests
 {
     public class RegisterRequest
     {
+
         [Required]
-        public string UserName { get; set; }
+        public string Username { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -13,8 +15,8 @@ namespace ExpensesTracker.API.Contracts.Requests
         [Required]
         public string Password { get; set; }
 
-       // [Required]
-       // [Compare("Password", ErrorMessage = "Passwords do not match.")]
-        //public string ConfirmPassword { get; set; }
+        [Required]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }
     }
 }

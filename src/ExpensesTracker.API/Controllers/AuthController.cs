@@ -1,4 +1,5 @@
 ﻿using ExpensesTracker.API.Contracts.Requests;
+using ExpensesTracker.API.Contracts.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,18 +23,26 @@ namespace ExpensesTracker.API.Controllers
         {
             var identityUser = new IdentityUser
             {
-                UserName = request.UserName,
+                UserName = request.Username,
                 Email = request.Email,               
             };
 
-            var identityResult = await userManager.CreateAsync(identityUser,request.Password);
+            var identityResult = await userManager.CreateAsync(identityUser, request.Password);
 
             if (identityResult.Succeeded)
             {
-                 return Ok("User was registered please login");
+                 return Ok(new RegisterResponse
+                 {
+                     IsSuccess = true,
+                     Message = "Successfully Registerd, Login Please."
+                 });
             }
 
-            return BadRequest("Something went wrong");
+            return BadRequest(new RegisterResponse
+            {
+                IsSuccess = false,
+                Message = "Something Went Wrong, Try Again."
+            });
         }
     }
 }
