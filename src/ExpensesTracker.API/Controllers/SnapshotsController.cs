@@ -2,6 +2,7 @@
 using ExpensesTracker.API.Contracts.Responses;
 using ExpensesTracker.API.Repositories;
 using ExpensesTracker.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,8 @@ namespace ExpensesTracker.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SnapshotsController : ControllerBase
+    [Authorize]
+    public class SnapshotsController : ApiControllerBase
     {
         private readonly ISnapshotService snapshotService;
         private readonly ISnapshotRepository snapshotRepository;
@@ -23,17 +25,16 @@ namespace ExpensesTracker.API.Controllers
         }
 
         [HttpPost("create-test")]
-        public async Task<IActionResult> CreateSnapshotTest()
+        public async Task CreateSnapshotTest()
         {
-            var snapshot = await snapshotService.CreateMonthlySnapshotAsync();
-            return Ok(snapshot);
+            await snapshotService.RunMonthlySnapshots();
         }
 
 
         [HttpGet("latest")]
         public async Task<IActionResult> GetLatest()
         {
-            var snapshot = await snapshotService.GetLatestSnapshotAsync();
+            var snapshot = await snapshotService.GetLatestSnapshotAsync(GetUserId());
 
             if(snapshot == null)
             {

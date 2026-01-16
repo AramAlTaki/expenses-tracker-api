@@ -15,13 +15,14 @@ namespace ExpensesTracker.API.Repositories
             this.configuration = configuration;
         }
 
-
-        public  string CreateJWTToken(IdentityUser user)
+        public string CreateJWTToken(IdentityUser user)
         {
-            var claims = new List<Claim>();
-
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
 

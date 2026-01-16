@@ -4,11 +4,13 @@ using ExpensesTracker.API.Contracts.Responses;
 using ExpensesTracker.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using ExpensesTracker.API.Models;
+using Microsoft.AspNetCore.Authorization;
 namespace ExpensesTracker.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionsController : ControllerBase
+    public class TransactionsController : ApiControllerBase
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly IMapper mapper;
@@ -22,7 +24,7 @@ namespace ExpensesTracker.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetTransactionsRequest request)
         {
-            var transactionsDomain = await transactionRepository.GetAllAsync(request);
+            var transactionsDomain = await transactionRepository.GetAllAsync(request, GetUserId());
 
             return Ok(mapper.Map<List<TransactionResponse>>(transactionsDomain));
         }
@@ -45,6 +47,8 @@ namespace ExpensesTracker.API.Controllers
         public async Task<IActionResult> Create(CreateTransactionRequest request)
         {
             var transactionDomain = mapper.Map<Transaction>(request);
+
+            transactionDomain.UserId = GetUserId();
 
             await transactionRepository.CreateAsync(transactionDomain);
 

@@ -3,12 +3,14 @@ using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Contracts.Requests;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExpensesTracker.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    [Authorize]
+    public class CategoriesController : ApiControllerBase
     {
         private readonly ICategoryRepository categoryRepository;
         private readonly IMapper mapper;
@@ -20,9 +22,9 @@ namespace ExpensesTracker.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromRoute] int page = 1, [FromRoute] int pageSize = 15)
         {
-            var categories = await categoryRepository.GetAllAsync();
+            var categories = await categoryRepository.GetAllAsync(GetUserId(), page, pageSize);
 
             return Ok(mapper.Map<List<Category>>(categories));
         }
@@ -45,6 +47,8 @@ namespace ExpensesTracker.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request)
         {
             var category = mapper.Map<Category>(request);
+
+            category.UserId = GetUserId();
 
             var createdCategory = await categoryRepository.CreateAsync(category);
 

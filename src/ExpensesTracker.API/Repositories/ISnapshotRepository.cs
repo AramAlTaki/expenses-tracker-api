@@ -5,7 +5,7 @@ namespace ExpensesTracker.API.Repositories
 {
     public interface ISnapshotRepository
     {
-        Task<Snapshot> CreateMonthlySnapshotAsync();
-        Task<Snapshot?> GetLatestSnapshotAsync(); 
+        Task<Snapshot> CreateMonthlySnapshotAsync(Guid userId);
+        Task<Snapshot?> GetLatestSnapshotAsync(Guid userId); 
     }
 }

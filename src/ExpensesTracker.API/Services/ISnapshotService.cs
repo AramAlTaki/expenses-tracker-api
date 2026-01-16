@@ -4,7 +4,7 @@ namespace ExpensesTracker.API.Services
 {
     public interface ISnapshotService
     {
-        Task<Snapshot> CreateMonthlySnapshotAsync();
-        Task<Snapshot?> GetLatestSnapshotAsync();
+        Task RunMonthlySnapshots();
+        Task<Snapshot?> GetLatestSnapshotAsync(Guid userId);
     }
 }

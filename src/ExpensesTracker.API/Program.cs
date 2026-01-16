@@ -135,17 +135,16 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseStaticFiles(new StaticFileOptions
-/*
+app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
     RequestPath = "/Images"
 });
-*/
+
 
 RecurringJob.AddOrUpdate<ISnapshotService>(
     "monthly-snapshot",
-    service => service.CreateMonthlySnapshotAsync(),
+    service => service.RunMonthlySnapshots(),
     Cron.Monthly);
 
 app.MapControllers();

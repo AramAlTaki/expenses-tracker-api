@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.API.Data;
+﻿using ExpensesTracker.API.Contracts.Requests;
+using ExpensesTracker.API.Data;
 using ExpensesTracker.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,11 +14,16 @@ namespace ExpensesTracker.API.Repositories
             this.context = context;
         }
 
-        public async Task<List<Category>> GetAllAsync()
+        public async Task<List<Category>> GetAllAsync(Guid userId, int page, int pageSize)
         {
+            var skipResults = (page - 1) * pageSize;
+
             return await context.Categories
+                .Where(c => c.UserId == userId)
                 .Include(c => c.Budget)
                 .Include(c => c.Transactions)
+                .Skip(skipResults)
+                .Take(pageSize)
                 .ToListAsync();
         }
 

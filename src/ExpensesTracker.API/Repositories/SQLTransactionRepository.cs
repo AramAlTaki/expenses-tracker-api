@@ -15,9 +15,9 @@ namespace ExpensesTracker.API.Repositories
             this.context = context;
         }
 
-        public async Task<List<Transaction>> GetAllAsync(GetTransactionsRequest request)
+        public async Task<List<Transaction>> GetAllAsync(GetTransactionsRequest request, Guid userId)
         {
-            var transactions = context.Transactions.Include(t => t.Category).Include(t => t.Receipt).AsQueryable();
+            var transactions = context.Transactions.Where(t => t.UserId == userId).Include(t => t.Category).Include(t => t.Receipt).AsQueryable();
 
             if(request.CategoryId != null)
             {

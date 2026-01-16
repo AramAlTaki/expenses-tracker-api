@@ -4,19 +4,19 @@ namespace ExpensesTracker.API.Contracts.Requests
 {
     public class GetTransactionsRequest
     {
-        [Range(1, 12, ErrorMessage = "StartMonth must be between 1 and 12.")]
+        public Guid? CategoryId { get; set; }
+
+        [Range(1, 12, ErrorMessage = "Start Month must be between 1 and 12.")]
         public int? StartMonth { get; set; }
 
-        [Range(2000, 2100, ErrorMessage = "StartYear is out of valid range.")]
+        [Range(2000, 2100, ErrorMessage = "Start Year must be between 2000 and 2100.")]
         public int? StartYear { get; set; }
 
-        [Range(1, 12, ErrorMessage = "EndMonth must be between 1 and 12.")]
+        [Range(1, 12, ErrorMessage = "End Month must be between 1 and 12.")]
         public int? EndMonth { get; set; }
 
-        [Range(2000, 2100, ErrorMessage = "EndYear is out of valid range.")]
+        [Range(2000, 2100, ErrorMessage = "End Year must be between 2000 and 2100.")]
         public int? EndYear { get; set; }
-
-        public Guid? CategoryId { get; set; }
 
         public bool? IsIncome { get; set; }
 

@@ -9,6 +9,9 @@ namespace ExpensesTracker.API.Models
         [Required(ErrorMessage = "Id is required.")]
         public Guid Id { get; set; }
 
+        [Required(ErrorMessage = "User Id is required.")]
+        public Guid UserId { get; set; }
+
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
         public string Name { get; set; }

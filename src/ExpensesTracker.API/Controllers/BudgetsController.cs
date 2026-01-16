@@ -3,12 +3,14 @@ using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Contracts.Responses;
 using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpensesTracker.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BudgetsController : ControllerBase
     {
         private readonly IBudgetRepository budgetRepository;

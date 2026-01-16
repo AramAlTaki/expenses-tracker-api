@@ -8,17 +8,19 @@ namespace ExpensesTracker.API.Repositories
     public class SQLSnapshotRepository : ISnapshotRepository
     {
         private readonly ExpensesTrackerDbContext context;
+        private readonly ExpensesTrackerAuthDbContext authContext;
 
-        public SQLSnapshotRepository(ExpensesTrackerDbContext context)
+        public SQLSnapshotRepository(ExpensesTrackerDbContext context, ExpensesTrackerAuthDbContext authContext)
         {
             this.context = context;
+            this.authContext = authContext;
         }
 
-        public async Task<Snapshot> CreateMonthlySnapshotAsync()
+        public async Task<Snapshot> CreateMonthlySnapshotAsync(Guid userId)
         {
             var now = DateTime.UtcNow;
 
-            var lastSnapshot = await GetLatestSnapshotAsync();
+            var lastSnapshot = await GetLatestSnapshotAsync(userId);
 
             var startDate = lastSnapshot != null
                 ? new DateTime(lastSnapshot.Year, lastSnapshot.Month, 1).AddMonths(1)
@@ -26,6 +28,7 @@ namespace ExpensesTracker.API.Repositories
 
             var transactions = await context.Transactions
                 .Where(t => t.IssueDate >= startDate)
+                .Where(t => t.UserId == userId)
                 .ToListAsync();
 
             decimal snapshotBalance = 
@@ -34,6 +37,7 @@ namespace ExpensesTracker.API.Repositories
             var snapshot = new Snapshot
             {
                 Id = Guid.NewGuid(),
+                UserId = userId,
                 Balance = snapshotBalance,
                 Month = now.Month,
                 Year = now.Year,
@@ -45,9 +49,10 @@ namespace ExpensesTracker.API.Repositories
             return snapshot;
         }
 
-        public async Task<Snapshot?> GetLatestSnapshotAsync()
+        public async Task<Snapshot?> GetLatestSnapshotAsync(Guid userId)
         {
             var snapshot = await context.Snapshots
+                .Where(s => s.UserId == userId)
                 .OrderByDescending(s => s.Year)
                 .ThenByDescending(s => s.Month)
                 .FirstOrDefaultAsync();

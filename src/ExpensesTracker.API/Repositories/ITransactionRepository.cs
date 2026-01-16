@@ -5,7 +5,7 @@ namespace ExpensesTracker.API.Repositories
 {
     public interface ITransactionRepository
     {
-        Task<List<Transaction>> GetAllAsync(GetTransactionsRequest request);
+        Task<List<Transaction>> GetAllAsync(GetTransactionsRequest request, Guid userId);
         Task<Transaction?> GetByIdAsync(Guid id);
         Task<Transaction> CreateAsync(Transaction transaction);
         Task<Transaction?> UpdateAsync(Guid id, Transaction transaction);

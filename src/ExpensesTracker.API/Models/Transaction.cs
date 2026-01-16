@@ -9,8 +9,8 @@ namespace ExpensesTracker.API.Models
         [Required(ErrorMessage = "Id is required.")]
         public Guid Id { get; set; }
 
-        //[Required(ErrorMessage = "User Id is required.")]
-        //public Guid UserId { get; set; }
+        [Required(ErrorMessage = "User Id is required.")]
+        public Guid UserId { get; set; }
 
         [Required(ErrorMessage = "Category Id is required.")]
         public Guid CategoryId { get; set; }

@@ -2,6 +2,7 @@
 using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace ExpensesTracker.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ImagesController : ControllerBase
     {
         private readonly IImageRepository imageRepository;
