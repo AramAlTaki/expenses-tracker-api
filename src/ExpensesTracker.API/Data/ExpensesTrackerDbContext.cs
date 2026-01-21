@@ -23,6 +23,9 @@ namespace ExpensesTracker.API.Data
 
             modelBuilder.ApplyConfiguration(new TransactionMapping());
             modelBuilder.ApplyConfiguration(new ImageMapping());
+            modelBuilder.ApplyConfiguration(new CategoryMapping());
+            modelBuilder.ApplyConfiguration(new BudgetMapping());
+            modelBuilder.ApplyConfiguration(new SnapshotMapping());
         }
     }
 }

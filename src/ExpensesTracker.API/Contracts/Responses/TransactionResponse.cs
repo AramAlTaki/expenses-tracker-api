@@ -8,7 +8,7 @@
         public decimal Amount { get; set; }
         public string? CurrencyCode { get; set; }
         public bool IsIncome { get; set; }
-        public DateTime IssueDate { get; set; }
+        public DateOnly IssueDate { get; set; }
         public CategorySummaryResponse Category { get; set; }
         public ReceiptSummaryResponse Receipt { get; set; }
     }

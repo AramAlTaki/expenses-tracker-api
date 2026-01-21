@@ -4,16 +4,19 @@ using ExpensesTracker.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ExpensesTracker.API.Migrations.ExpensesTrackerAuthDb
+namespace ExpensesTracker.API.Migrations
 {
     [DbContext(typeof(ExpensesTrackerAuthDbContext))]
-    partial class ExpensesTrackerAuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260121192303_Initial Migration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
