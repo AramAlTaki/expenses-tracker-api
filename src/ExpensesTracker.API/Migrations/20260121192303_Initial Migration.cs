@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ExpensesTracker.API.Migrations.ExpensesTrackerAuthDb
+namespace ExpensesTracker.API.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatingAuthDatabase : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

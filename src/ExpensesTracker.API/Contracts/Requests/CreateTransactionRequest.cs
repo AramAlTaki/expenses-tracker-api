@@ -4,8 +4,7 @@ namespace ExpensesTracker.API.Contracts.Requests
 {
     public class CreateTransactionRequest
     {
-        [Required(ErrorMessage = "Category Id is required.")]
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
@@ -25,6 +24,6 @@ namespace ExpensesTracker.API.Contracts.Requests
         public bool IsIncome { get; set; }
 
         [Required(ErrorMessage = "Issue Date is required.")]
-        public DateTime IssueDate { get; set; }
+        public DateOnly IssueDate { get; set; }
     }
 }

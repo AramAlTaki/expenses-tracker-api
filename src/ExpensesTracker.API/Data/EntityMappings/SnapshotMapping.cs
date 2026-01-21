@@ -17,11 +17,6 @@ namespace ExpensesTracker.API.Data.EntityMappings
                 .IsRequired();
 
             builder
-                .HasOne<IdentityUser>()
-                .WithMany()
-                .HasForeignKey(s => s.UserId);
-
-            builder
                 .Property(s => s.UserId)
                 .IsRequired();
 

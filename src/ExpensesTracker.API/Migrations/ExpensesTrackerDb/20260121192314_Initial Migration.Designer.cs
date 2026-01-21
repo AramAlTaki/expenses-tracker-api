@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ExpensesTracker.API.Migrations
+namespace ExpensesTracker.API.Migrations.ExpensesTrackerDb
 {
     [DbContext(typeof(ExpensesTrackerDbContext))]
-    [Migration("20260116071734_Added User Id properties")]
-    partial class AddedUserIdproperties
+    [Migration("20260121192314_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,7 +71,7 @@ namespace ExpensesTracker.API.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<bool>("IsIncome")
                         .HasColumnType("bit");
@@ -79,7 +79,7 @@ namespace ExpensesTracker.API.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -167,7 +167,7 @@ namespace ExpensesTracker.API.Migrations
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -176,23 +176,26 @@ namespace ExpensesTracker.API.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("CurrencyCode")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
+                        .HasColumnType("nvarchar(3)")
+                        .HasDefaultValue("USD");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("varchar");
 
                     b.Property<bool>("IsIncome")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("IssueDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("IssueDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -231,8 +234,7 @@ namespace ExpensesTracker.API.Migrations
                     b.HasOne("ExpensesTracker.API.Models.Category", "Category")
                         .WithMany("Transactions")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
                 });

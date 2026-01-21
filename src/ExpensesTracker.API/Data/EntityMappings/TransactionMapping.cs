@@ -11,18 +11,18 @@ namespace ExpensesTracker.API.Data.EntityMappings
         public void Configure(EntityTypeBuilder<Transaction> builder)
         {
 
+            builder.HasKey(t => t.Id);
+
+            builder.Property(t => t.Id)
+                .IsRequired();
+
+            builder.Property(t => t.UserId)
+                .IsRequired();
+
             builder.HasOne(t => t.Category)
                 .WithMany(c => c.Transactions)
                 .HasForeignKey(t => t.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne<IdentityUser>()
-                .WithMany()
-                .HasForeignKey(t => t.UserId).IsRequired();
-
-            builder.HasKey(t => t.Id);
-            builder.Property(t => t.Id)
-                .IsRequired();
 
             builder.Property(t => t.Name)
                 .HasColumnType("varchar")

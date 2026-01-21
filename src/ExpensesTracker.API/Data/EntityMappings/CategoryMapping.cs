@@ -13,11 +13,6 @@ namespace ExpensesTracker.API.Data.EntityMappings
                 .HasKey(c => c.Id);
 
             builder
-                .HasOne<IdentityUser>()
-                .WithMany()
-                .HasForeignKey(c => c.UserId);
-
-            builder
                 .Property(c => c.UserId)
                 .IsRequired();
 

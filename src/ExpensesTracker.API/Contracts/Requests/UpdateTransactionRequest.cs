@@ -19,6 +19,6 @@ namespace ExpensesTracker.API.Contracts.Requests
         public string? CurrencyCode { get; set; }
 
         [Required(ErrorMessage = "Issue Date is required.")]
-        public DateTime IssueDate { get; set; }
+        public DateOnly IssueDate { get; set; }
     }
 }
