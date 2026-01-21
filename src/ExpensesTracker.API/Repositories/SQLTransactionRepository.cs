@@ -31,13 +31,13 @@ namespace ExpensesTracker.API.Repositories
 
             if(request.StartMonth != null && request.StartYear != null)
             {
-                var startDate = new DateTime((int) request.StartYear, (int) request.StartMonth, 1);
+                var startDate = new DateOnly((int) request.StartYear, (int) request.StartMonth, 1);
                 transactions = transactions.Where(t => t.IssueDate >= startDate);
             }
 
             if(request.EndMonth != null && request.EndYear != null)
             {
-                var endDate = new DateTime((int)request.EndYear, (int)request.EndMonth, 1).AddMonths(1);
+                var endDate = new DateOnly((int)request.EndYear, (int)request.EndMonth, 1).AddMonths(1);
                 transactions = transactions.Where(t => t.IssueDate <= endDate);
             }
 

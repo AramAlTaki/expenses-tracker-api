@@ -1,4 +1,5 @@
-﻿using ExpensesTracker.API.Models;
+﻿using ExpensesTracker.API.Data.EntityMappings;
+using ExpensesTracker.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpensesTracker.API.Data
@@ -20,57 +21,8 @@ namespace ExpensesTracker.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.Receipt)
-                .WithOne(i => i.Transaction)
-                .HasForeignKey<Image>(i => i.TransactionId);
-
-            modelBuilder.Entity<Category>()
-                .HasOne(c=> c.Budget)
-                .WithOne(b => b.Category)
-                .HasForeignKey<Budget>(b => b.CategoryId);
-
-            modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.Category)
-                .WithMany(c => c.Transactions)
-                .HasForeignKey(t => t.CategoryId);
-
-            modelBuilder.Entity<Transaction>()
-                .Property(t => t.Amount)
-                .HasPrecision(18, 4);
-
-            modelBuilder.Entity<Budget>()
-                .Property(b => b.Amount)
-                .HasPrecision(18, 4);
-
-            modelBuilder.Entity<Snapshot>()
-                .Property(b => b.Balance)
-                .HasPrecision(18, 4);
-
-            modelBuilder.Entity<Category>()
-                .Property(c => c.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()")
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Budget>()
-                .Property(c => c.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()")
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Transaction>()
-                .Property(c => c.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()")
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Image>()
-                .Property(c => c.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()")
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Snapshot>()
-                .Property(c => c.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()")
-                .ValueGeneratedOnAdd();
+            modelBuilder.ApplyConfiguration(new TransactionMapping());
+            modelBuilder.ApplyConfiguration(new ImageMapping());
         }
     }
 }

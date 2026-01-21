@@ -23,8 +23,8 @@ namespace ExpensesTracker.API.Repositories
             var lastSnapshot = await GetLatestSnapshotAsync(userId);
 
             var startDate = lastSnapshot != null
-                ? new DateTime(lastSnapshot.Year, lastSnapshot.Month, 1).AddMonths(1)
-                : DateTime.MinValue;
+                ? new DateOnly(lastSnapshot.Year, lastSnapshot.Month, 1).AddMonths(1)
+                : DateOnly.MinValue;
 
             var transactions = await context.Transactions
                 .Where(t => t.IssueDate >= startDate)
