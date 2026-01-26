@@ -4,6 +4,7 @@ using ExpensesTracker.API.Contracts.Requests;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using ExpensesTracker.API.Contracts.Responses;
 
 namespace ExpensesTracker.API.Controllers
 {
@@ -41,6 +42,38 @@ namespace ExpensesTracker.API.Controllers
             }
 
             return Ok(mapper.Map<Category>(category));
+        }
+
+        [HttpGet]
+        [Route("{Id:guid}/Budget-Information")]
+        public async Task<IActionResult> GetInformation([FromRoute] Guid Id)
+        {
+            var category = await categoryRepository.GetByIdAsync(Id);
+
+            var month = DateTime.UtcNow.Month;
+            var budgetAmount = category.Budget.Amount;
+            var spendingAmount = decimal.Zero;
+
+            foreach (var transaction in category.Transactions)
+            {
+                if (transaction.IsIncome == false && transaction.IssueDate.Month == month)
+                {
+                    spendingAmount += transaction.Amount;
+                }
+            }
+            var remainingAmount = budgetAmount - spendingAmount;
+
+            var response = new BudgetSummaryResponse 
+            {
+                Name = category.Name,
+                Description = category.Description,
+                IssueDate = category.CreatedAt,
+                BudgetAmount = budgetAmount,
+                SpendingAmount = spendingAmount,
+                RemainingAmount = remainingAmount
+            };
+
+            return Ok(response);        
         }
 
         [HttpPost]
