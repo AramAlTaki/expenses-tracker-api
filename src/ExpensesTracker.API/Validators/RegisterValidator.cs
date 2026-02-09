@@ -12,7 +12,7 @@ namespace ExpensesTracker.API.Validators
         {
             _userManager = userManager;
 
-            RuleFor(u => u.Username)
+            RuleFor(x => x.Username)
                 .NotEmpty().WithMessage("Username is required.")
                 .MaximumLength(50).WithMessage("Username must not exceed 50 characters.")
                 .MustAsync(BeUniqueUsername).WithMessage("Username is already taken.");

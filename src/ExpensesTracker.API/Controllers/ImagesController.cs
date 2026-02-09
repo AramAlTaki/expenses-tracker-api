@@ -2,6 +2,7 @@
 using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Repositories;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,90 +12,68 @@ namespace ExpensesTracker.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ImagesController : ControllerBase
+    public class ImagesController : ApiControllerBase
     {
-        private readonly IImageRepository imageRepository;
+        private readonly IImageRepository _imageRepository;
+        private readonly IValidator<UploadReceiptRequest> _validator;
 
-        public ImagesController(IImageRepository imageRepository)
+        public ImagesController(IImageRepository imageRepository, IValidator<UploadReceiptRequest> validator)
         {
-            this.imageRepository = imageRepository;
+            _imageRepository = imageRepository;
+            _validator = validator;
         }
 
         [HttpPost]
         [Route("Upload")]
         public async Task<IActionResult> Upload([FromForm] UploadReceiptRequest request)
         {
-            ValidateFileUpload(request);
-            if (ModelState.IsValid)
+            var validationResult = await _validator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
+
+            if (errorResponse != null)
+                return errorResponse;
+
+            var imageModel = new Image
             {
-                var imageModel = new Image
-                {
-                    TransactionId = request.TransactionId,
-                    File = request.File,
-                    Extension = Path.GetExtension(request.File.FileName),
-                    SizeInBytes = request.File.Length,
-                    FileName = request.File.FileName,
-                };
+                TransactionId = request.TransactionId,
+                File = request.File,
+                Extension = Path.GetExtension(request.File.FileName),
+                SizeInBytes = request.File.Length,
+                FileName = request.File.FileName,
+            };
 
-                await imageRepository.Upload(imageModel);
+            await _imageRepository.Upload(imageModel);
 
-                return Ok(imageModel);
-            }
-            return BadRequest(ModelState);
+            return Ok(imageModel);
         }
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Upload(Guid id, [FromForm] ReplaceReceiptRequest request)
+        public async Task<IActionResult> Upload(Guid id, [FromForm] UploadReceiptRequest request)
         {
-            ValidateFileReplace(request);
-            if (ModelState.IsValid)
-            {
-                var imageModel = new Image
-                {
-                    TransactionId = request.TransactionId,
-                    File = request.File,
-                    Extension = Path.GetExtension(request.File.FileName),
-                    SizeInBytes = request.File.Length,
-                    FileName = request.File.FileName,
-                };
+            var validationResult = await _validator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
 
-                imageModel = await imageRepository.Replace(id, imageModel);
+            if (errorResponse != null)
+                return errorResponse;
 
-                if(imageModel == null)
-                {
-                    return NotFound();
-                }
+            var imageModel = new Image
+            {
+                TransactionId = request.TransactionId,
+                File = request.File,
+                Extension = Path.GetExtension(request.File.FileName),
+                SizeInBytes = request.File.Length,
+                FileName = request.File.FileName,
+            };
 
-                return Ok(imageModel);
-            }
-            return BadRequest(ModelState);
-        }
+            imageModel = await _imageRepository.Replace(id, imageModel);
 
-        private void ValidateFileUpload(UploadReceiptRequest request)
-        {
-            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
-            if (!allowedExtensions.Contains(Path.GetExtension(request.File.FileName)))
+            if(imageModel == null)
             {
-                ModelState.AddModelError("file", "Unsupported file extension");
+                return NotFound();
             }
-            if (request.File.Length > 52425880)
-            {
-                ModelState.AddModelError("file", "File size more than 5MB, Please upload a smaller size file.");
-            }
-        }
 
-        private void ValidateFileReplace(ReplaceReceiptRequest request)
-        {
-            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
-            if (!allowedExtensions.Contains(Path.GetExtension(request.File.FileName)))
-            {
-                ModelState.AddModelError("file", "Unsupported file extension");
-            }
-            if (request.File.Length > 52425880)
-            {
-                ModelState.AddModelError("file", "File size more than 5MB, Please upload a smaller size file.");
-            }
+            return Ok(imageModel);
         }
     }
 }

@@ -1,21 +1,12 @@
 ﻿using ExpensesTracker.API.Contracts.Requests;
-using ExpensesTracker.API.Repositories;
 using FluentValidation;
 
 namespace ExpensesTracker.API.Validators
 {
-    public class CreateTransactionValidator : AbstractValidator<CreateTransactionRequest>
+    public class UpdateTransactionValidator : AbstractValidator<UpdateTransactionRequest>
     {
-        private readonly ICategoryRepository _categoryRepository;
-
-        public CreateTransactionValidator(ICategoryRepository categoryRepository)
+        public UpdateTransactionValidator()
         {
-            _categoryRepository = categoryRepository;
-
-            RuleFor(x => x.CategoryId)
-                .MustAsync(BeValidCategory)
-                .WithMessage("Category does not exist.");
-
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required.")
                 .MaximumLength(100).WithMessage("Transaction name must not exceed 500 characters");
@@ -35,19 +26,6 @@ namespace ExpensesTracker.API.Validators
             RuleFor(x => x.IssueDate)
                 .NotEmpty().WithMessage("Issue Date is required.")
                 .Must(d => d <= DateOnly.FromDateTime(DateTime.UtcNow)).WithMessage("Issue date cannot be in the future.");
-        }
-
-        private async Task<bool> BeValidCategory(Guid? categoryId, CancellationToken cl)
-        {
-            if (!categoryId.HasValue)
-                return true;
-
-            if (categoryId.Value == Guid.Empty)
-                return false;
-
-            var category = await _categoryRepository.GetByIdAsync(categoryId.Value);
-
-            return category != null;
         }
     }
 }

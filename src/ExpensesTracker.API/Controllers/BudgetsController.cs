@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using ExpensesTracker.API.Contracts.Requests;
 using ExpensesTracker.API.Contracts.Responses;
 using ExpensesTracker.API.Models;
 using ExpensesTracker.API.Repositories;
+using ExpensesTracker.API.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,15 +14,23 @@ namespace ExpensesTracker.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class BudgetsController : ControllerBase
+    public class BudgetsController : ApiControllerBase
     {
         private readonly IBudgetRepository budgetRepository;
         private readonly IMapper mapper;
+        private readonly IValidator<CreateBudgetRequest> createValidator;
+        private readonly IValidator<UpdateBudgetRequest> updateValidator;
 
-        public BudgetsController(IBudgetRepository budgetRepository, IMapper mapper)
+        public BudgetsController(
+            IBudgetRepository budgetRepository, 
+            IMapper mapper,
+            IValidator<CreateBudgetRequest> createValidator, 
+            IValidator<UpdateBudgetRequest> updateValidator)
         {
             this.budgetRepository = budgetRepository;
             this.mapper = mapper;
+            this.createValidator = createValidator;
+            this.updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -37,9 +48,15 @@ namespace ExpensesTracker.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateBudgetRequest budgetRequest)
+        public async Task<IActionResult> Create([FromBody] CreateBudgetRequest request)
         {
-            var budgetModel = mapper.Map<Budget>(budgetRequest);
+            var validationResult = await createValidator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
+
+            if (errorResponse != null)
+                return errorResponse;
+
+            var budgetModel = mapper.Map<Budget>(request);
 
             await budgetRepository.CreateAsync(budgetModel);
 
@@ -50,9 +67,15 @@ namespace ExpensesTracker.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBudgetRequest budgetRequest)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBudgetRequest request)
         {
-            var budgetModel = mapper.Map<Budget>(budgetRequest);
+            var validationResult = await updateValidator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
+
+            if (errorResponse != null)
+                return errorResponse;
+
+            var budgetModel = mapper.Map<Budget>(request);
             budgetModel = await budgetRepository.UpdateAsync(id, budgetModel);
 
             if (budgetModel == null)

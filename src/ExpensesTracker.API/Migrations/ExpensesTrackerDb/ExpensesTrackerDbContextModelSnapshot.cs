@@ -51,7 +51,7 @@ namespace ExpensesTracker.API.Migrations.ExpensesTrackerDb
                     b.HasIndex("CategoryId")
                         .IsUnique();
 
-                    b.ToTable("Budgets");
+                    b.ToTable("Budgets", (string)null);
                 });
 
             modelBuilder.Entity("ExpensesTracker.API.Models.Category", b =>
@@ -83,7 +83,7 @@ namespace ExpensesTracker.API.Migrations.ExpensesTrackerDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("ExpensesTracker.API.Models.Image", b =>
@@ -122,7 +122,7 @@ namespace ExpensesTracker.API.Migrations.ExpensesTrackerDb
                     b.HasIndex("TransactionId")
                         .IsUnique();
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("ExpensesTracker.API.Models.Snapshot", b =>
@@ -151,7 +151,7 @@ namespace ExpensesTracker.API.Migrations.ExpensesTrackerDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Snapshots");
+                    b.ToTable("Snapshots", (string)null);
                 });
 
             modelBuilder.Entity("ExpensesTracker.API.Models.Transaction", b =>
@@ -201,7 +201,7 @@ namespace ExpensesTracker.API.Migrations.ExpensesTrackerDb
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("ExpensesTracker.API.Models.Budget", b =>

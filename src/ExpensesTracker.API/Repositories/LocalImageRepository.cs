@@ -1,7 +1,6 @@
 ﻿using ExpensesTracker.API.Data;
 using ExpensesTracker.API.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 
 namespace ExpensesTracker.API.Repositories
 {
@@ -74,7 +73,5 @@ namespace ExpensesTracker.API.Repositories
 
             return existingImage;
         }
-
-
     }
 }

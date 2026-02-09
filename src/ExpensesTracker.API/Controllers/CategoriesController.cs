@@ -1,10 +1,11 @@
-﻿using ExpensesTracker.API.Repositories;
-using ExpensesTracker.API.Models;
+﻿using AutoMapper;
 using ExpensesTracker.API.Contracts.Requests;
-using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using ExpensesTracker.API.Contracts.Responses;
+using ExpensesTracker.API.Models;
+using ExpensesTracker.API.Repositories;
+using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ExpensesTracker.API.Controllers
 {
@@ -15,11 +16,19 @@ namespace ExpensesTracker.API.Controllers
     {
         private readonly ICategoryRepository categoryRepository;
         private readonly IMapper mapper;
+        private readonly IValidator<CreateCategoryRequest> createValidator;
+        private readonly IValidator<UpdateCategoryRequest> updateValidator;
 
-        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper) 
+        public CategoriesController(
+            ICategoryRepository categoryRepository, 
+            IMapper mapper,
+            IValidator<CreateCategoryRequest> createValidator,
+            IValidator<UpdateCategoryRequest> updateValidator) 
         {
             this.categoryRepository = categoryRepository;
             this.mapper = mapper;
+            this.createValidator = createValidator;
+            this.updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -79,6 +88,12 @@ namespace ExpensesTracker.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request)
         {
+            var validationResult = await createValidator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
+
+            if (errorResponse != null)
+                return errorResponse;
+
             var category = mapper.Map<Category>(request);
 
             category.UserId = GetUserId();
@@ -94,6 +109,12 @@ namespace ExpensesTracker.API.Controllers
         [Route("{Id:guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] UpdateCategoryRequest request)
         {
+            var validationResult = await updateValidator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
+
+            if (errorResponse != null)
+                return errorResponse;
+
             var category = mapper.Map<Category>(request);
             var updatedCategory = await categoryRepository.UpdateAsync(Id, category);
 

@@ -5,6 +5,7 @@ using ExpensesTracker.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using ExpensesTracker.API.Models;
 using Microsoft.AspNetCore.Authorization;
+using FluentValidation;
 namespace ExpensesTracker.API.Controllers
 {
     [Authorize]
@@ -14,11 +15,19 @@ namespace ExpensesTracker.API.Controllers
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly IMapper mapper;
+        private readonly IValidator<CreateTransactionRequest> createValidator;
+        private readonly IValidator<UpdateTransactionRequest> updateValidator;
 
-        public TransactionsController(ITransactionRepository transactionRepository, IMapper mapper)
+        public TransactionsController(
+            ITransactionRepository transactionRepository, 
+            IMapper mapper, 
+            IValidator<CreateTransactionRequest> createValidator, 
+            IValidator<UpdateTransactionRequest> updateValidator)
         {
             this.transactionRepository = transactionRepository;
             this.mapper = mapper;
+            this.createValidator = createValidator;
+            this.updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -46,6 +55,12 @@ namespace ExpensesTracker.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateTransactionRequest request)
         {
+            var validationResult = await createValidator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
+
+            if (errorResponse != null)
+                return errorResponse;
+
             var transactionDomain = mapper.Map<Transaction>(request);
 
             transactionDomain.UserId = GetUserId();
@@ -61,6 +76,12 @@ namespace ExpensesTracker.API.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateTransactionRequest request)
         {
+            var validationResult = await updateValidator.ValidateAsync(request);
+            var errorResponse = ValidationFailedResponse(validationResult);
+
+            if (errorResponse != null)
+                return errorResponse;
+
             var transactionDomain = mapper.Map<Transaction>(request);
             transactionDomain = await transactionRepository.UpdateAsync(id, transactionDomain);
 
